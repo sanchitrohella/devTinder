@@ -2,22 +2,31 @@ const express = require("express");
 
 const app = express();
 
-// app.use("/user", (req, res) => {
-//   res.send("Hello About From the Server...");
-// });
+//Multiple Route Handlers
+//app.use("Route", [Middleware1, Middleware2, Middleware3, Middleware4]);
 
-app.get("/user/:userId", (req, res) => {
-  console.log(req.params);
-  res.send("Get User Data From the Server...");
-});
-
-app.post("/user", (req, res) => {
-  res.send("Post User Data to the Server...");
-});
-
-app.delete("/user", (req, res) => {
-  res.send("Delete User Data from the Server...");
-});
+app.use("/user", [
+  (req, res, next) => {
+    console.log("Getting User Data from the Server...");
+    next();
+    // res.send("User Data from the Server...");
+  },
+  (req, res, next) => {
+    console.log("2nd User Data sent from the Server...");
+    // res.send("2nd User Data sent from the Server...");
+    next();
+  },
+  (req, res, next) => {
+    console.log("3rd User Data sent from the Server...");
+    // res.send("3rd User Data sent from the Server...");
+    next();
+  },
+  (req, res, next) => {
+    console.log("4th User Data sent from the Server...");
+    res.send("4th User Data sent from the Server...");
+    next();
+  },
+]);
 
 app.listen(7777, () => {
   console.log("Server is running on port 7777...");
